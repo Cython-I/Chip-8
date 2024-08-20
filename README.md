@@ -50,7 +50,7 @@ build/../Chip8.exe path/to/yourfile.c8
 Replace path/to/yourfile.c8 with the path to your Chip-8 ROM file. 
 
 I have provided two roms as test in the Demo folder. These are from user [Timendus](https://github.com/Timendus) and I have no credit in their creation. You can however test with additional roms from
-Timendus from his chip8 testing repo here: (chip8-test-suite repo)[https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file] 
+Timendus from his chip8 testing repo here: [chip8-test-suite repo](https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file) 
 
 ### Sources for Roms
 - Both roms are credited to [Timendus](https://github.com/Timendus) I have only worked on the emulator itself NOT the two included roms
