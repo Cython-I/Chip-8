@@ -40,6 +40,14 @@ To get started with the Chip-8 emulator, follow these steps to build and run the
    ```
 5. **Locatate exe**
    Should be located in the build folder generated, Debug or Release.
+   
+### Running the Emulator
+To run the emulator, you need to provide the path to a .c8 file as a command-line argument. For example:
+
+```bash
+./Chip8.exe path/to/yourfile.c8
+Replace path/to/yourfile.c8 with the path to your Chip-8 ROM file. I have provided two in as test in the Demo folder
+```
 
 ##License
 This project is licensed under the MIT License.
