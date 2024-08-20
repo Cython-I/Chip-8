@@ -50,5 +50,5 @@ build/../Chip8.exe path/to/yourfile.c8
 Replace path/to/yourfile.c8 with the path to your Chip-8 ROM file. I have provided two in as test in the Demo folder
 
 
-###License
+### License
 This project is licensed under the MIT License.
