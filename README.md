@@ -25,7 +25,7 @@ To get started with the Chip-8 emulator, follow these steps to build and run the
    First, clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/chip8.git
+   git clone https://github.com/Cython-I/Chip8.git
    cd Chip8
    ```
 2. **Generate Build Files**
