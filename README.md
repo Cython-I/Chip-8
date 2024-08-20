@@ -26,7 +26,7 @@ To get started with the Chip-8 emulator, follow these steps to build and run the
 
    ```bash
    git clone https://github.com/yourusername/chip8.git
-   cd chip8
+   cd Chip8
    ```
 2. **Generate Build Files**
    Create a build directory and generate the build system files with CMake:
