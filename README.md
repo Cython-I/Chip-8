@@ -50,5 +50,5 @@ To run the emulator, you need to provide the path to a .c8 file as a command-lin
 Replace path/to/yourfile.c8 with the path to your Chip-8 ROM file. I have provided two in as test in the Demo folder
 
 
-##License
+###License
 This project is licensed under the MIT License.
