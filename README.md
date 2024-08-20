@@ -17,7 +17,7 @@ To get started with the Chip-8 emulator, follow these steps to build and run the
 - CMake (version 3.x or later)
 - A C++ compiler (e.g., GCC, Clang, MSVC)
 - [Optional] SDL2 library (The VC library is included, so no adjustments needed if working with Visual Studio)
-
+#### NOTE: Only tested with Visual Studio 2020!
 ### Building the Project
 
 1. **Clone the Repository**
