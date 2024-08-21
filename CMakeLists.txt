@@ -14,10 +14,9 @@ project (
 	VERSION 0.0.1
 	LANGUAGES CXX
 )
-#target_compile_features(Chip8 PRIVATE cxx_std_17)
 
-
-
+#The SDL libraries included are for MSVC! 
+#Would need to replace with the needed variants for other compilers: https://github.com/libsdl-org/SDL/releases
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/extern/SDL2/include ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable (Chip8 source/main.cpp source/Chip8.cpp)
 target_link_libraries(Chip8 ${CMAKE_CURRENT_SOURCE_DIR}/extern/SDL2/lib/x64/SDL2.lib ${CMAKE_CURRENT_SOURCE_DIR}/extern/SDL2/lib/x64/SDL2main.lib)
