@@ -1,5 +1,5 @@
 # Chip-8 Interpreter
-
+![Pong, shown on the display](./pictures/PONG_CHIP8.png)
 This is a simple Chip-8 interpreter written in C++. It allows interpretation of the simplistic Chip-8 programming language.
 
 ## Features
