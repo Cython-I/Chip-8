@@ -38,7 +38,8 @@ int main(int argc, char* argv[]) {
 	SDL_Event evt;
 	bool programRunning = true;
 	//MAIN LOOP
-	while (programRunning) {
+	while (programRunning)
+	{
 		while (SDL_PollEvent(&evt))
 		{
 			switch (evt.type)
@@ -46,16 +47,16 @@ int main(int argc, char* argv[]) {
 				case SDL_QUIT:  programRunning = false; break;
 			}
 		}
-
+	
 		now = steady_clock::now();
-
+	
 		if (!myChip.run())
 		{
 			programRunning = false;
 		}
-
+	
 		duration<double, std::milli> delta = now - prevFrame;
-
+	
 		prevFrame = now;
 		std::chrono::duration<double, std::milli> delta_ms(700.0 - delta.count());
 		auto delta_ms_duration = std::chrono::duration_cast<std::chrono::milliseconds>(delta_ms);
