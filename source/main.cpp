@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 	SDL_RenderClear(renderer);
 
 	Chip8 myChip(renderer);
-	std::string romFile{ "IBM.ch8" };
+	std::string romFile{ "4-flags.ch8" };
 
 	if (argc > 1) {
 		romFile = argv[1];
@@ -35,7 +35,6 @@ int main(int argc, char* argv[]) {
 	auto prevFrame = steady_clock::now();
 
 	
-	int count{};
 	SDL_Event evt;
 	bool programRunning = true;
 	//MAIN LOOP
@@ -50,7 +49,10 @@ int main(int argc, char* argv[]) {
 
 		now = steady_clock::now();
 
-		myChip.start();
+		if (!myChip.run())
+		{
+			programRunning = false;
+		}
 
 		duration<double, std::milli> delta = now - prevFrame;
 
@@ -59,7 +61,6 @@ int main(int argc, char* argv[]) {
 		auto delta_ms_duration = std::chrono::duration_cast<std::chrono::milliseconds>(delta_ms);
 		std::this_thread::sleep_for(std::chrono::milliseconds(delta_ms_duration.count()));
 
-		count++;
 	}
 	SDL_Delay(1000);
 	SDL_DestroyWindow(window);

@@ -4,25 +4,25 @@ Chip8::Chip8(SDL_Renderer* const renderer)
 	: m_renderer(renderer)
 {
 	// There’s a special instruction for setting I to a character’s address,
-	// so you can choose where to put it.But 050-09F is the standard used, unsure why*/
+	// so you can choose where to put it.But 050-09F is the standard used, unsure why
 	constexpr std::array fonts{
-		std::to_array<unsigned char>({
-			0xF0, 0x90, 0x90, 0x90, 0xF0,  //0
-			0x20, 0x60, 0x20, 0x20, 0x70,  //1
-			0xF0, 0x10, 0xF0, 0x80, 0xF0,  //2
-			0xF0, 0x10, 0xF0, 0x10, 0xF0,  //3
-			0x90, 0x90, 0xF0, 0x10, 0x10,  //4
-			0xF0, 0x80, 0xF0, 0x10, 0xF0,  //5
-			0xF0, 0x80, 0xF0, 0x90, 0xF0,  //6
-			0xF0, 0x10, 0x20, 0x40, 0x40,  //7
-			0xF0, 0x90, 0xF0, 0x90, 0xF0,  //8
-			0xF0, 0x90, 0xF0, 0x10, 0xF0,  //9
-			0xF0, 0x90, 0xF0, 0x90, 0x90,  //A
-			0xE0, 0x90, 0xE0, 0x90, 0xE0,  //B
-			0xF0, 0x80, 0x80, 0x80, 0xF0,  //C
-			0xE0, 0x90, 0x90, 0x90, 0xE0,  //D
-			0xF0, 0x80, 0xF0, 0x80, 0xF0,  //E
-			0xF0, 0x80, 0xF0, 0x80, 0x80,  //F
+		std::to_array<uint8_t>({
+			0xF0, 0x90, 0x90, 0x90, 0xF0,  // 0
+			0x20, 0x60, 0x20, 0x20, 0x70,  // 1
+			0xF0, 0x10, 0xF0, 0x80, 0xF0,  // 2
+			0xF0, 0x10, 0xF0, 0x10, 0xF0,  // 3
+			0x90, 0x90, 0xF0, 0x10, 0x10,  // 4
+			0xF0, 0x80, 0xF0, 0x10, 0xF0,  // 5
+			0xF0, 0x80, 0xF0, 0x90, 0xF0,  // 6
+			0xF0, 0x10, 0x20, 0x40, 0x40,  // 7
+			0xF0, 0x90, 0xF0, 0x90, 0xF0,  // 8
+			0xF0, 0x90, 0xF0, 0x10, 0xF0,  // 9
+			0xF0, 0x90, 0xF0, 0x90, 0x90,  // A
+			0xE0, 0x90, 0xE0, 0x90, 0xE0,  // B
+			0xF0, 0x80, 0x80, 0x80, 0xF0,  // C
+			0xE0, 0x90, 0x90, 0x90, 0xE0,  // D
+			0xF0, 0x80, 0xF0, 0x80, 0xF0,  // E
+			0xF0, 0x80, 0xF0, 0x80, 0x80,  // F
 		})
 	};
 
@@ -34,12 +34,12 @@ Chip8::Chip8(SDL_Renderer* const renderer)
 	}
 }
 
-void Chip8::start()
+bool Chip8::run()
 {
 	// Fetch:
 	// Read the instruction that PC is currently pointing at from memory. An instruction is two bytes,
 	// so you will need to read two successive bytes from memory and combine them into one 16-bit instruction.
-	unsigned short instruction = (memory[pc] << 8) | memory[pc + 1];
+	uint16_t instruction = (memory[pc] << 8) | memory[pc + 1];
 	pc += 2;
 
 	// Decode
@@ -48,104 +48,137 @@ void Chip8::start()
 	// includes sprite data, it should be padded so any instructions following it will be properly
 	// situated in RAM.
 
-	unsigned short nibble = instructionNibble(instruction);
-	unsigned short x = instructionX(instruction);
-	unsigned short y = instructionY(instruction);
-	unsigned short n = instructionN(instruction);
-	unsigned short nn = instructionNN(instruction);
-	unsigned short nnn = instructionNNN(instruction);
-	unsigned short kk = instructionKK(instruction);
+	uint16_t nibble = instructionNibble(instruction);
+	uint16_t x = instructionX(instruction);
+	uint16_t y = instructionY(instruction);
+	uint16_t n = instructionN(instruction);
+	uint16_t nn = instructionNN(instruction);
+	uint16_t nnn = instructionNNN(instruction);
+	uint16_t kk = instructionKK(instruction);
 
-	unsigned char xcoordinate{};
-	unsigned char ycoordinate{};
-	unsigned short ivalue{};
-	unsigned short nthByte{};
+	uint8_t xcoordinate{};
+	uint8_t ycoordinate{};
+	uint16_t ivalue{};
+	uint16_t nthByte{};
 
-	int temp{};
-	int color{};
+	uint16_t temp{};
 
 	switch (nibble)
 	{
+
 	case 0x0000:
 
-		switch (kk) {
-			//CLS -> Clear the display
+		switch (kk) 
+		{
 		case 0xE0:
-			//display
-			//SDL_RenderClear(renderer);
+			// CLS -> Clear the display
 			for (int i = 0; i < 64; i++) {
 				for (int j = 0; j < 32; j++) {
 					display[i][j] = 0;
 				}
 			}
+
 			break;
+		
 		case 0xEE:
-			//The interpreter sets the program counter to the address at the top of the stack,
-			//then subtracts 1 from the stack pointer.
+			// RET -> Return from a subroutine.
+			// The interpreter sets the program counter to the address at the top of the stack,
+			// then subtracts 1 from the stack pointer.
 			pc = mystack.top();
 			mystack.pop();
 			break;
 		default:
+			// Technically there is a SYS addr jump, but not handled anymore in more modern interpreters
 			std::cerr << "Invalid Instruction: " << instruction << '\n';
-			exit(1);
-			break;
+			return false;
+			
 		}
-		break;
+	break;
+
 	case 0x1000:
-		//JP addr -> Jump to location nnn.
-		//The interpreter sets the program counter to nnn.
+		// JP addr -> Jump to location nnn.
+		// The interpreter sets the program counter to nnn.
 		pc = nnn;
 		break;
 	case 0x2000:
-		//CALL addr -> Call subroutine at nnn The interpreter increments the stack pointer,
-		//then puts the current PC on the top of the stack. The PC is then set to nnn.
+		// CALL addr -> Call subroutine at nnn The interpreter increments the stack pointer,
+		// then puts the current PC on the top of the stack. The PC is then set to nnn.
 		mystack.push(pc);
 		pc = nnn;
 		break;
 	case 0x3000:
+		// SE Vx, byte -> Skip next instruction if Vx = kk.
+		// The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
 		if (V[x] == kk) {
 			pc += 2;
 		}
 		break;
 	case 0x4000:
+		// SNE Vx, byte
+		// Skip next instruction if Vx != kk.
 		if (V[x] != kk) {
 			pc += 2;
 		}
 		break;
 	case 0x5000:
+		// SE Vx, Vy
+		// Skip next instruction if Vx = Vy.
 		if (V[x] == V[y]) {
 			pc += 2;
 		}
 		break;
 	case 0x6000:
+		// LD Vx, byte
+		// Set Vx = kk.
 		V[x] = kk;
 		break;
 	case 0x7000:
+		// ADD Vx, byte
+		// Set Vx = Vx + kk.
 		V[x] = V[x] + kk;
 		break;
 	case 0x8000:
-		switch (n) {
+		switch (n) 
+		{
 		case 0x0:
+			// LD Vx, Vy
+			// Set Vx = Vy.
 			V[x] = V[y];
 			break;
 		case 0x1:
+			// OR Vx, Vy
+			// Set Vx = Vx OR Vy.
 			V[x] = V[x] | V[y];
 			break;
 		case 0x2:
+			// AND Vx, Vy
+			// Set Vx = Vx AND Vy.
 			V[x] = V[x] & V[y];
 			break;
 		case 0x3:
+			// XOR Vx, Vy
+			// Set Vx = Vx XOR Vy.
 			V[x] = V[x] ^ V[y];
 			break;
-		case 0x4:
-			V[x] = V[x] + V[y];
-			V[0xF] = (V[x] > 255) ? 1 : 0;
+		case 0x4: //modified
+			// ADD Vx, Vy
+			// Set Vx = Vx + Vy, set VF = carry.
+			// The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
+			temp = V[x] + V[y];
+			V[0xF] = (temp > 255) ? 1 : 0;
+			V[x] = temp & 0xFF;
 			break;
 		case 0x5:
+			// SUB Vx, Vy
+			// Set Vx = Vx - Vy, set VF = NOT borrow.
+			// If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
 			V[0xF] = (V[x] > V[y]) ? 1 : 0;
 			V[x] = V[x] - V[y];
 			break;
-		case 0x6:
+		case 0x6://Work on this
+			// SHR Vx {, Vy}
+			// Set Vx = Vx SHR 1.
+			// If the least - significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
 			if ((0x1 & V[x]) == 0x1) {
 				V[0xF] = 1;
 			}
@@ -170,8 +203,8 @@ void Chip8::start()
 			break;
 		default:
 			std::cerr << "Invalid Instruction: " << std::hex << instruction << '\n';
-			exit(1);
-			break;
+			return false;
+			
 		}
 		break;
 	case 0x9000:
@@ -266,7 +299,7 @@ void Chip8::start()
 			I = fontStart + (V[x] * 5);
 			break;
 		case 0x33:
-			temp = V[x];
+			temp = V[x];//temp was an int
 			memory[I + 2] = temp % 10;
 			temp = temp / 10;
 			memory[I + 1] = temp % 10;
@@ -302,6 +335,7 @@ void Chip8::start()
 			--sound;
 		}
 	}
+	return true;
 }
 //Note: string_view is convient but ifstream needs .data() and it does NOT ensure null termination
 bool Chip8::loadRom(const std::string& romFile)

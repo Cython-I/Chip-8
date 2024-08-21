@@ -17,28 +17,28 @@
 class Chip8 {
 public:
     Chip8(SDL_Renderer* const renderer) ;
-    void start();
+    bool run();
     bool loadRom(const std::string& rom) ;
     void draw(int x, int y);
 
 private:
     // Direct Access to up to 4 kilobytes of RAM
     // 0x000 (0) -> 0x1FF (511) Reserved For Interpreter (Not to be used by programs)
-    // Chip-8 programs start at 0x200 (512) -> 0xFFF (4095)
-    // Some begin at 0x600 (1536), those starting in the latter are for ETI 660 computers
+   
+    std::array<uint8_t,memorySize> memory{};
+    using DisplayMatrix = std::array<std::array<bool, screenHeight>, screenWidth>;//pixels total of 2048 or 64 * 32
+    DisplayMatrix display{};
 
-    unsigned char memory[memorySize]{}; 
-    bool display[screenWidth][screenHeight]{}; //pixels total of 2048 or 64 * 32
-
-    bool keyPressed = false; 
+    bool keyPressed{ false };
     int scanCode{}; 
-    SDL_Renderer* m_renderer = nullptr; 
+    SDL_Renderer* m_renderer{ nullptr };
 
-    unsigned short pc = startIndex; // Program Counter starts at 0x200
-    std::stack<unsigned short> mystack; // Stack  16-bit
-    unsigned short I{}; // Index Register 16-bit
-    unsigned char V[16]{}; // 16-bit General Purpose Variable Registers V[0] - V[15]
-    unsigned char delay{}; // Sound Register 8-bit
-    unsigned char sound{}; // TODO: Activate whenever the sound timer register (ST) is non-zero.
-    unsigned char keys[16]{}; // Current state of keypad
+    // Chip-8 programs start at 0x200 (512) -> 0xFFF (4095)
+    uint16_t pc{ startIndex };
+    std::stack<uint16_t> mystack;
+    uint16_t I{};
+    std::array<uint8_t,16> V{}; // 16-bit General Purpose Variable Registers V[0] - V[15]
+    uint8_t delay{}; // Sound Register 8-bit
+    uint8_t sound{}; // TODO: Activate whenever the sound timer register (ST) is non-zero.
+    std::array<uint8_t,16> keys{}; // Current state of keypad
 };

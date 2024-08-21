@@ -11,10 +11,10 @@ constexpr int kilobyte = 1024;
 constexpr int memorySize = kilobyte * 4;
 
 // Helper functions
-constexpr unsigned short instructionNibble(unsigned short instr) { return (instr & 0xf000); }
-constexpr unsigned short instructionX(unsigned short instr) { return (instr & 0x0f00) >> 8; }
-constexpr unsigned short instructionY(unsigned short instr) { return (instr & 0x00f0) >> 4; }
-constexpr unsigned short instructionN(unsigned short instr) { return (instr & 0x000f); }
-constexpr unsigned short instructionNN(unsigned short instr) { return (instr & 0x00ff); }
-constexpr unsigned short instructionNNN(unsigned short instr) { return (instr & 0x0fff); }
-constexpr unsigned short instructionKK(unsigned short instr) { return (instr & 0x00ff); }
+constexpr uint16_t instructionNibble(uint16_t instr) { return (instr & 0xf000); }
+constexpr uint16_t instructionX(uint16_t instr) { return (instr & 0x0f00) >> 8; }
+constexpr uint16_t instructionY(uint16_t instr) { return (instr & 0x00f0) >> 4; }
+constexpr uint16_t instructionN(uint16_t instr) { return (instr & 0x000f); }
+constexpr uint16_t instructionNN(uint16_t instr) { return (instr & 0x00ff); }
+constexpr uint16_t instructionNNN(uint16_t instr) { return (instr & 0x0fff); }
+constexpr uint16_t instructionKK(uint16_t instr) { return (instr & 0x00ff); }
