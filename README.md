@@ -1,16 +1,16 @@
-# Chip-8 Emulator
+# Chip-8 Interpreter
 
-This is a simple Chip-8 emulator written in C++. It emulates the Chip-8 virtual machine, allowing you to run and debug Chip-8 programs.
+This is a simple Chip-8 interpreter written in C++. It allows interpretation of the simplistic Chip-8 programming language.
 
 ## Features
 
-- Emulation of the Chip-8 instruction set
+- Interpretation  of the Chip-8 instruction set
 - Support for basic graphics and input
 - Ability to load and run Chip-8 ROMs
 
 ## Getting Started
 
-To get started with the Chip-8 emulator, follow these steps to build and run the project:
+To get started with the Chip-8 interpreter, follow these steps to build and run the project:
 
 ### Prerequisites
 
@@ -49,8 +49,14 @@ build/../Chip8.exe path/to/yourfile.c8
 ```
 Replace path/to/yourfile.c8 with the path to your Chip-8 ROM file. 
 
+## Credit
+
+This project was possible thanks to the technical reference written by Cowgod [here](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM). They provided the entire
+instruction set of the Chip-8 interpreter as well as some information on the Chip-8 language that was beneficial 
+
 I have provided two roms as test in the Demo folder. These are from user [Timendus](https://github.com/Timendus) and I have no credit in their creation. You can however test with additional roms from
 Timendus from his chip8 testing repo here: [chip8-test-suite repo](https://github.com/Timendus/chip8-test-suite?tab=readme-ov-file) 
+
 
 ### Sources for Roms
 - Both roms are credited to [Timendus](https://github.com/Timendus) I have only worked on the emulator itself NOT the two included roms
