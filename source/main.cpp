@@ -1,10 +1,12 @@
 #include <chrono>
 #include <thread>
+
 #include "Chip8.h"
 
 using namespace std::chrono;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
 	
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -18,7 +20,8 @@ int main(int argc, char* argv[]) {
 	Chip8 myChip(renderer);
 	std::string romFile{ "4-flags.ch8" };
 
-	if (argc > 1) {
+	if (argc > 1) 
+	{
 		romFile = argv[1];
 	}
 

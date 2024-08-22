@@ -28,7 +28,8 @@ Chip8::Chip8(SDL_Renderer* const renderer)
 
 	// Adding fonts from 0x050-0x09F (80-159)
 	int start = fontStart;
-	for (auto x : fonts) {
+	for (auto x : fonts) 
+	{
 		memory[start] = x;
 		++start;
 	}
@@ -65,15 +66,16 @@ bool Chip8::run()
 
 	switch (nibble)
 	{
-
 	case 0x0000:
 
 		switch (kk) 
 		{
 		case 0xE0:
 			// CLS -> Clear the display
-			for (int i = 0; i < 64; i++) {
-				for (int j = 0; j < 32; j++) {
+			for (int i = 0; i < 64; i++) 
+			{
+				for (int j = 0; j < 32; j++) 
+				{
 					display[i][j] = 0;
 				}
 			}
@@ -109,21 +111,24 @@ bool Chip8::run()
 	case 0x3000:
 		// SE Vx, byte -> Skip next instruction if Vx = kk.
 		// The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
-		if (V[x] == kk) {
+		if (V[x] == kk) 
+		{
 			pc += 2;
 		}
 		break;
 	case 0x4000:
 		// SNE Vx, byte
 		// Skip next instruction if Vx != kk.
-		if (V[x] != kk) {
+		if (V[x] != kk) 
+		{
 			pc += 2;
 		}
 		break;
 	case 0x5000:
 		// SE Vx, Vy
 		// Skip next instruction if Vx = Vy.
-		if (V[x] == V[y]) {
+		if (V[x] == V[y]) 
+		{
 			pc += 2;
 		}
 		break;
@@ -179,7 +184,8 @@ bool Chip8::run()
 			// SHR Vx {, Vy}
 			// Set Vx = Vx SHR 1.
 			// If the least - significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
-			if ((0x1 & V[x]) == 0x1) {
+			if ((0x1 & V[x]) == 0x1) 
+			{
 				V[0xF] = 1;
 			}
 			else {
@@ -192,10 +198,12 @@ bool Chip8::run()
 			V[x] = V[y] - V[x];
 			break;
 		case 0xE:
-			if ((char)V[x] < 0 == 0x1) {
+			if ((char)V[x] < 0 == 0x1) 
+			{
 				V[0xF] = 1;
 			}
-			else {
+			else 
+			{
 				V[0xF] = 0;
 			}
 			V[x] = V[x] << 1;
@@ -208,7 +216,8 @@ bool Chip8::run()
 		}
 		break;
 	case 0x9000:
-		if (V[x] != V[y]) {
+		if (V[x] != V[y]) 
+		{
 			pc += 2;
 		}
 		break;
@@ -226,21 +235,25 @@ bool Chip8::run()
 		V[0xF] = 0;
 		//Read n bytes from memory
 		//for each byte
-		for (int nth = 0; nth < n; ++nth) {
+		for (int nth = 0; nth < n; ++nth) 
+		{
 			ycoordinate = (V[y] % screenHeight) + nth;
 			nthByte = memory[I + nth];
-			for (int pixel = 0; pixel < 8; ++pixel) {
+			for (int pixel = 0; pixel < 8; ++pixel) 
+			{
 				xcoordinate = (V[x] % screenWidth) + pixel;
 				/*If the current pixel in the sprite row is on and the pixel at coordinates X,Y
 				on the screen is also on, turn off the pixel and set VF to 1*/
 				bool currentPixel = (nthByte >> (7 - pixel)) & 1;
-				if (currentPixel && display[xcoordinate][ycoordinate]) {
+				if (currentPixel && display[xcoordinate][ycoordinate]) 
+				{
 					display[xcoordinate][ycoordinate] = 0;
 					SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 					SDL_RenderDrawPoint(m_renderer, xcoordinate, ycoordinate);
 					V[15] = 1;
 				}
-				else if (currentPixel && display[xcoordinate][ycoordinate] == 0) {
+				else if (currentPixel && display[xcoordinate][ycoordinate] == 0) 
+				{
 					//Current bit is on and display not drawn (display[xcoordinate][ycoordinate] == 0)
 					display[xcoordinate][ycoordinate] = 1;
 					SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
@@ -248,38 +261,45 @@ bool Chip8::run()
 				}
 
 				SDL_RenderPresent(m_renderer);
-				if (xcoordinate >= screenWidth) {
+				if (xcoordinate >= screenWidth) 
+				{
 					break;
 				}
 			}
 			//If you reach the right edge of the screen, stop drawing this row
-			if (ycoordinate >= screenHeight + 1) {
+			if (ycoordinate >= screenHeight + 1) 
+			{
 				break;
 			}
 		}
 
 		break;
 	case 0xE000:
-		switch (kk) {
+		switch (kk) 
+		{
 		case 0x9E:
-			if (V[x] <= 0xF && keys[V[x]] == 1) {
+			if (V[x] <= 0xF && keys[V[x]] == 1) 
+			{
 				pc += 2;
 			}
 			break;
 		case 0xA1:
-			if (V[x] <= 0xF && keys[V[x]] == 0) {
+			if (V[x] <= 0xF && keys[V[x]] == 0) 
+			{
 				pc += 2;
 			}
 			break;
 		}
 		break;
 	case 0xF000:
-		switch (kk) {
+		switch (kk) 
+		{
 		case 0x07:
 			V[x] = delay;
 			break;
 		case 0x0A:
-			if (keyPressed) {
+			if (keyPressed) 
+			{
 				V[x] = scanCode;
 			}
 			else {
@@ -307,12 +327,14 @@ bool Chip8::run()
 			memory[I] = temp % 10;
 			break;
 		case 0x55:
-			for (int index = 0; index <= x; index++) {
+			for (int index = 0; index <= x; index++) 
+			{
 				memory[I + index] = V[index];
 			}
 			break;
 		case 0x65:
-			for (int index = 0; index <= x; index++) {
+			for (int index = 0; index <= x; index++) 
+			{
 				V[index] = memory[I + index];
 			}
 			break;
@@ -327,11 +349,14 @@ bool Chip8::run()
 		break;
 	}
 
-	if (delay > 0) {
+	if (delay > 0) 
+	{
 		--delay;
 	}
-	if (sound > 0) {
-		if (sound == 1) {
+	if (sound > 0) 
+	{
+		if (sound == 1) 
+		{
 			--sound;
 		}
 	}
@@ -354,19 +379,22 @@ bool Chip8::loadRom(const std::string& romFile)
 	std::vector<char> buffer(size);
 	rom.read(buffer.data(), size);
 
-	if (rom.fail() || rom.bad()) {
+	if (rom.fail() || rom.bad()) 
+	{
 		std::cerr << "Error reading from file: " << romFile << std::endl;
 		return false;
 	}
 
 	//Load the rom into memory
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++) 
+	{
 		memory[startIndex + i] = buffer[i];
 	}
 	return true;
 }
 
-void Chip8::draw(int x, int y) {
+void Chip8::draw(int x, int y) 
+{
 	SDL_SetRenderDrawColor(m_renderer, 225, 225, 225, 225);
 	SDL_RenderDrawPoint(m_renderer, x, y);
 	SDL_RenderPresent(m_renderer);

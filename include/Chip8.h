@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <array>
 #include <vector>
-#include <string_view>
 
 #include "constants.h"  
 #include "SDL.h"
