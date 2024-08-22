@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 // Screen dimensions
 constexpr int screenWidth = 64;
 constexpr int screenHeight = 32;

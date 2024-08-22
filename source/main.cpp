@@ -1,9 +1,10 @@
-#include <chrono>
-#include <thread>
+
+#define SDL_MAIN_HANDLED
 
 #include "Chip8.h"
-
-using namespace std::chrono;
+#include "SDL.h"
+#include <chrono>
+#include <thread>
 
 int main(int argc, char* argv[]) 
 {
@@ -25,17 +26,23 @@ int main(int argc, char* argv[])
 		romFile = argv[1];
 	}
 
-	if (!myChip.loadRom(romFile))
+
+	auto shutDown = [&](int exitCode) 
 	{
 		SDL_Delay(1000);
 		SDL_DestroyWindow(window);
 		SDL_DestroyRenderer(renderer);
 		SDL_Quit();
-		return 1;
+		return exitCode;
+	};
+
+	if (!myChip.loadRom(romFile))
+	{
+		return shutDown(1);
 	}
 
-	auto now = steady_clock::now();
-	auto prevFrame = steady_clock::now();
+	auto now = std::chrono::steady_clock::now();
+	auto prevFrame = std::chrono::steady_clock::now();
 
 	
 	SDL_Event evt;
@@ -47,18 +54,20 @@ int main(int argc, char* argv[])
 		{
 			switch (evt.type)
 			{
-				case SDL_QUIT:  programRunning = false; break;
+				case SDL_QUIT:  
+					programRunning = false; 
+					break;
 			}
 		}
 	
-		now = steady_clock::now();
+		now = std::chrono::steady_clock::now();
 	
 		if (!myChip.run())
 		{
 			programRunning = false;
 		}
 	
-		duration<double, std::milli> delta = now - prevFrame;
+		std::chrono::duration<double, std::milli> delta = now - prevFrame;
 	
 		prevFrame = now;
 		std::chrono::duration<double, std::milli> delta_ms(700.0 - delta.count());
@@ -66,9 +75,5 @@ int main(int argc, char* argv[])
 		std::this_thread::sleep_for(std::chrono::milliseconds(delta_ms_duration.count()));
 
 	}
-	SDL_Delay(1000);
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
-	SDL_Quit();
-	return 0;
+	return shutDown(0);
 }
