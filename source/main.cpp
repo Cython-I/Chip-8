@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 	Chip8 myChip(renderer);
 
 	//Check if a romfile is specified, if not attempt to get a demo file
+
 	std::string romFile{ argc > 1 ? argv[1] : getDemoRom()};
 
 	if (!myChip.loadRom(romFile))
@@ -87,6 +88,8 @@ static void shutdownSDL(SDL_Window* window, SDL_Renderer* renderer) noexcept
 
 static std::string getDemoRom(std::wstring demo)
 {
+	std::string stdDemoPathString{};
+#if defined(_WIN32) || defined(_WIN64)
 	wchar_t buffer[MAX_PATH];
 	GetModuleFileNameW(NULL, buffer, MAX_PATH);
 	std::wcout << buffer << '\n';
@@ -103,6 +106,10 @@ static std::string getDemoRom(std::wstring demo)
 
 	using convert_type = std::codecvt_utf8<wchar_t>;
 	std::wstring_convert<convert_type, wchar_t> converter;
-	std::string stdDemoPathString = converter.to_bytes(demoPathString);
+	stdDemoPathString = converter.to_bytes(demoPathString);
+#else 
+	//implement code for linux
+	stdDemoPathString = "Linux is not yet supported!";
+#endif
 	return stdDemoPathString;
 }
